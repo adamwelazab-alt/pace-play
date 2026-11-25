@@ -138,3 +138,6 @@ alter table member_scores enable row level security;
 alter table login_tokens enable row level security;
 alter table sessions enable row level security;
 alter table schema_migrations enable row level security;
+
+-- Records this file as applied, so it also works when pasted into Supabase's SQL editor.
+insert into schema_migrations (name) values ('001_init.sql') on conflict do nothing;

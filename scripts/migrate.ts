@@ -15,7 +15,7 @@ async function main() {
     console.log(`Applying ${file}`);
     await sql.begin(async (tx) => {
       await tx.unsafe(readFileSync(join(dir, file), "utf8"));
-      await tx`insert into schema_migrations (name) values (${file})`;
+      await tx`insert into schema_migrations (name) values (${file}) on conflict do nothing`;
     });
   }
   console.log("Database is up to date.");
