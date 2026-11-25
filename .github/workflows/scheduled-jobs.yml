@@ -1,0 +1,19 @@
+# Runs the app's scheduled job every 15 minutes: sends rating requests that are due,
+# publishes the monthly release on the 1st, and deletes old data.
+# Needs two repository secrets (Settings > Secrets and variables > Actions):
+#   APP_URL      the live web address, e.g. https://pace-play.vercel.app
+#   CRON_SECRET  the same value as CRON_SECRET in Vercel
+name: Scheduled jobs
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    if: ${{ vars.CRON_ENABLED == 'true' }}
+    steps:
+      - name: Call the job
+        run: |
+          curl --fail-with-body -sS -X POST "${{ secrets.APP_URL }}/api/cron" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
